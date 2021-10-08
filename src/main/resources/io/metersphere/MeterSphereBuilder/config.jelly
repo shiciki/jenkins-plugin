@@ -39,6 +39,9 @@
             </f:entry>
         </f:radioBlock>
     </f:section>
+    <f:entry title="自定义参数，按K:V形式，逗号分隔" field="varMap">
+            <f:textbox/>
+    </f:entry>
     <f:section title="运行模式">
         <f:radioBlock title="串行" name="mode" value="serial" inline="true"
                       checked="${instance.mode == 'serial'}">

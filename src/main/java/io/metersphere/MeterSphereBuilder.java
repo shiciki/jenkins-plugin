@@ -53,10 +53,11 @@ public class MeterSphereBuilder extends Builder implements SimpleBuildStep, Seri
     private final String environmentId;
     private final String mode;//运行模式
     private final String runEnvironmentId;//运行环境
+    private final String varMap;//运行变量
 
 
     @DataBoundConstructor
-    public MeterSphereBuilder(String msEndpoint, String msAccessKey, String msSecretKey, String workspaceId, String orgId, String projectId, PrintStream logger, String testPlanId, String testCaseNodeId, String testId, String testCaseId, String method, String result, String environmentId, String mode, String runEnvironmentId) {
+    public MeterSphereBuilder(String msEndpoint, String msAccessKey, String msSecretKey, String workspaceId, String orgId, String projectId, PrintStream logger, String testPlanId, String testCaseNodeId, String testId, String testCaseId, String method, String result, String environmentId, String mode, String runEnvironmentId, String varMap) {
         this.msEndpoint = msEndpoint;
         this.msAccessKey = msAccessKey;
         this.msSecretKey = msSecretKey;
@@ -73,6 +74,7 @@ public class MeterSphereBuilder extends Builder implements SimpleBuildStep, Seri
         this.environmentId = environmentId;
         this.mode = mode;
         this.runEnvironmentId = runEnvironmentId;
+        this.varMap = varMap;
     }
 
     @Override
@@ -113,7 +115,7 @@ public class MeterSphereBuilder extends Builder implements SimpleBuildStep, Seri
                     break;
                 case Method.single:
                     List<TestCaseDTO> testCaseIds = meterSphereClient.getTestCaseIds(projectId);//项目下
-                    getTestStepsBySingle(meterSphereClient, testCaseIds, environmentId, projectId);
+                        getTestStepsBySingle(meterSphereClient, testCaseIds, environmentId, projectId);
                     break;
                 default:
                     log("测试用例不存在");
@@ -629,5 +631,9 @@ public class MeterSphereBuilder extends Builder implements SimpleBuildStep, Seri
 
     public String getOrgId() {
         return orgId;
+    }
+
+    public String getVarMap() {
+        return varMap;
     }
 }
