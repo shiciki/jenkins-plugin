@@ -152,7 +152,6 @@ public class MeterSphereClient {
             return jsonObject.getString("execResult");
         }
 
-
     }
 
     public String getApiTestState(String reportId) {
@@ -164,7 +163,7 @@ public class MeterSphereClient {
     }
 
     /*单独执行场景测试*/
-    public String runScenario(TestCaseDTO testCaseDTO, String id, String type, RunModeConfig config) {
+    public String runScenario(TestCaseDTO testCaseDTO, String id, String type, RunModeConfig config,String varmap) {
         HashMap<String, Object> params = new HashMap<>();
         params.put("id", UUID.randomUUID().toString());
         params.put("projectId", id);
@@ -172,10 +171,16 @@ public class MeterSphereClient {
         params.put("planScenarioId", testCaseDTO.getId());
         params.put("ids", Arrays.asList(testCaseDTO.getId()));
         params.put("config", config);
+        params.put("jinput",varmap);
+        LogUtil.info("params:"+params);
+
         ResultHolder result;
         if (type.equals("scenario")) {
+            //todo 增加参数
+            LogUtil.info("API_AUTOMATION_RUN_SINGLE");
             result = call(ApiUrlConstants.API_AUTOMATION_RUN_SINGLE, RequestMethod.POST, params);
         } else {
+            LogUtil.info("API_AUTOMATION_RUN");
             result = call(ApiUrlConstants.API_AUTOMATION_RUN, RequestMethod.POST, params);
         }
         return JSON.toJSONString(result.getData());
