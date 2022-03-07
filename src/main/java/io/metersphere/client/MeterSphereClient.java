@@ -157,12 +157,13 @@ public class MeterSphereClient {
     }
 
     /*单独执行场景测试*/
-    public String runScenario(TestCaseDTO testCaseDTO, String id, String type, RunModeConfig config) {
+    public String runScenario(TestCaseDTO testCaseDTO, String id, String type, RunModeConfig config,String vars) {
         HashMap<String, Object> params = new HashMap<>();
         params.put("id", UUID.randomUUID().toString());
         params.put("projectId", id);
         params.put("ids", Arrays.asList(testCaseDTO.getId()));
         params.put("config", config);
+        params.put("vars", vars);
         ResultHolder result;
         if (type.equals("scenario")) {
             result = call(ApiUrlConstants.API_AUTOMATION_RUN_SINGLE, RequestMethod.POST, params);

@@ -95,7 +95,7 @@ public class MeterSphereUtils {
         return num;
     }
 
-    public static int runScenario(MeterSphereClient meterSphereClient, TestCaseDTO c, String id, String projectId, String runMode, String resourcePoolId) {
+    public static int runScenario(MeterSphereClient meterSphereClient, TestCaseDTO c, String id, String projectId, String runMode, String resourcePoolId,String vars) {
         String url = meterSphereClient.getBaseInfo();
         int num = 1;
         String reportId = null;
@@ -109,7 +109,7 @@ public class MeterSphereUtils {
                 config.setReportType("iddReport");
                 config.setOnSampleError(true);
             }
-            reportId = meterSphereClient.runScenario(c, projectId, runMode, config);
+            reportId = meterSphereClient.runScenario(c, projectId, runMode, config,vars);
         } catch (Exception e) {
             num = 0;
             log(c.getName() + "场景测试发生异常:" + e.getMessage());
@@ -197,7 +197,7 @@ public class MeterSphereUtils {
     }
 
     public static void getTestStepsBySingle(MeterSphereClient meterSphereClient, List<TestCaseDTO> testCaseIds,
-                                            String projectId, String testCaseId, String testPlanId, String resourcePoolId) {
+                                            String projectId, String testCaseId, String testPlanId, String resourcePoolId,String vars) {
         log("testCaseId=" + "[" + testCaseId + "]");
         boolean flag = true;
         if (CollectionUtils.isNotEmpty(testCaseIds)) {
@@ -223,7 +223,7 @@ public class MeterSphereUtils {
                     break;
                 case Results.SCENARIO:
                 case Results.API_SCENARIO:
-                    num = MeterSphereUtils.runScenario(meterSphereClient, c, testCaseId, projectId, "scenario", resourcePoolId);
+                    num = MeterSphereUtils.runScenario(meterSphereClient, c, testCaseId, projectId, "scenario", resourcePoolId,vars);
                     if (num == 0) {
                         flag = false;
                     }

@@ -50,13 +50,14 @@ public class MeterSphereBuilder extends Builder implements SimpleBuildStep, Seri
     private final String result;
     private final String mode;//运行模式
     private final String resourcePoolId;//运行环境
+    private final String varmap;//运行环境
 
 
     @DataBoundConstructor
     public MeterSphereBuilder(String msEndpoint, String msAccessKey, String msSecretKey, String workspaceId,
                               String projectId, PrintStream logger, String testPlanId, String testCaseNodeId,
                               String testId, String testCaseId, String method, String result, String testPlanName,
-                              String mode, String resourcePoolId) {
+                              String mode, String resourcePoolId, String varmap) {
         this.msEndpoint = msEndpoint;
         this.msAccessKey = msAccessKey;
         this.msSecretKey = msSecretKey;
@@ -72,12 +73,14 @@ public class MeterSphereBuilder extends Builder implements SimpleBuildStep, Seri
         this.result = result;
         this.mode = mode;
         this.resourcePoolId = resourcePoolId;
+        this.varmap = varmap;
     }
 
     @Override
     public void perform(@Nonnull Run<?, ?> run, @Nonnull FilePath workspace, @Nonnull Launcher launcher, @Nonnull TaskListener listener) throws InterruptedException, IOException {
         this.logger = listener.getLogger();
         MeterSphereUtils.logger = logger;
+        String vars=run.getEnvironment(listener).expand(varmap);
         listener.getLogger().println("workspace=" + workspace);
         listener.getLogger().println("number=" + run.getNumber());
         listener.getLogger().println("url=" + run.getUrl());
@@ -105,7 +108,7 @@ public class MeterSphereBuilder extends Builder implements SimpleBuildStep, Seri
                     break;
                 case Method.SINGLE:
                     List<TestCaseDTO> testCaseIds = client.getTestCases(projectId);//项目下
-                    MeterSphereUtils.getTestStepsBySingle(client, testCaseIds, projectId, testCaseId, testPlanId, resourcePoolId);
+                    MeterSphereUtils.getTestStepsBySingle(client, testCaseIds, projectId, testCaseId, testPlanId, resourcePoolId,vars);
                     break;
                 default:
                     log("测试用例不存在");
